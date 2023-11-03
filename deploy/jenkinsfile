@@ -2,16 +2,44 @@ pipeline {
     agent any
 
     environment {
-      ANSIBLE_CONFIG="${WORKSPACE}/deploy/ansible.cfg"
-     }
-
-    stages {
-      stage {
-        steps {
-          
-        }
-      }
+        ANSIBLE_CONFIG="${WORKSPACE}/deploy/ansible.cfg"
     }
 
-  
-}   
+
+
+    stages {
+        stage('Initial Cleanup') {
+            steps {
+                dir("${WORKSPACE}") {
+                    deleteDir()
+                }
+            }
+        }
+
+        stage('Checkout SCM') {
+            steps {
+                git branch: 'featurepipeline', url: 'https://github.com/NyerhovwoOnitcha/Project14.git'
+            }
+        }
+
+        stage('Set dynamic roles_path') {
+            steps {
+                sh 'echo ${WORKSPACE}'
+                sh 'sed -i "3 a roles_path=${WORKSPACE}/roles" ${WORKSPACE}/deploy/ansible.cfg'
+            }
+        }
+
+        stage('Run ansible playbook') {
+            steps {
+                ansiblePlaybook become: true, colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'Ansible', inventory: 'inventory/dev.yml', playbook: 'playbooks/site.yml'
+            }
+        }
+
+        stage('Cleanup after build') {
+            steps {
+                cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenUnstable: true, deleteDirs: true)
+            }
+        }
+    }
+}
+
