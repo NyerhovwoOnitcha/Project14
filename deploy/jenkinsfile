@@ -21,7 +21,7 @@ pipeline {
 
         stage('Checkout SCM') {
             steps {
-                git branch: 'featurepipeline', url: 'https://github.com/NyerhovwoOnitcha/Project14.git'
+                git branch: 'main', url: 'https://github.com/NyerhovwoOnitcha/Project14.git'
             }
         }
 
