@@ -1,9 +1,9 @@
 ---
 - name: Ensure MySQL users are present.
   mysql_user:
-    name: "webaccess"
-    host: 0.0.0.0
-    password: secret
+    name: "homestead"
+    host: 172.31.42.33
+    password: sePret^i
     priv: "*.*:ALL,GRANT"
     state: present
     append_privs: "{{ item.append_privs | default('no') }}"
