@@ -4,7 +4,7 @@
     name: "webaccess"
     host: 0.0.0.0
     password: secret
-    priv: "*.*:ALL,GRANT"
+    priv: "*.*:ALL, GRANT"
     state: present
     append_privs: "{{ item.append_privs | default('no') }}"
     encrypted: "{{ item.encrypted | default('no') }}"
