@@ -16,8 +16,8 @@
 #   tags:
 #     - always
 
-- name: reference database role
-  import_playbook: ../static-assignments/database.yml
+# - name: reference database role
+#   import_playbook: ../static-assignments/database.yml
 
 - name: reference nginx role
   import_playbook: ../static-assignments/nginx.yml
