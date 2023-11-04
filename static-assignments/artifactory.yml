@@ -1,0 +1,7 @@
+---
+- name: artifactory role
+  hosts: artifactory
+  roles:
+   - artifactory
+  become: true
+  
