@@ -1,25 +1,28 @@
 ---
 
-- name: import common.yml
-  import_playbook: ../static-assignments/common.yml
-  tags:
-    - always
+# - name: import common.yml
+#   import_playbook: ../static-assignments/common.yml
+#   tags:
+#     - always
 
-- name: import common_del.yml
-  import_playbook: ../static-assignments/common_del.yml
+# - name: import common_del.yml
+#   import_playbook: ../static-assignments/common_del.yml
 
-- name: import webservers playbook
-  import_playbook: ../static-assignments/uatwebservers.yml
+# - name: import webservers playbook
+#   import_playbook: ../static-assignments/uatwebservers.yml
 
-- name: Include dynamic variables 
-  include: ../dynamic-assignments/env-vars.yml
-  tags:
-    - always
+# - name: Include dynamic variables 
+#   include: ../dynamic-assignments/env-vars.yml
+#   tags:
+#     - always
 
 - name: reference database role
   import_playbook: ../static-assignments/database.yml
 
-- name: import loadbalancers assignment
-  import_playbook: ../static-assignments/loadbalancer.yml
-  when: load_balancer_is_required
+- name: reference nginx role
+  import_playbook: ../static-assignments/nginx.yml
+
+# - name: import loadbalancers assignment
+#   import_playbook: ../static-assignments/loadbalancer.yml
+#   when: load_balancer_is_required
 
