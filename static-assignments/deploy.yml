@@ -1,0 +1,164 @@
+---
+- name: Deploying the PHP Application to Dev Enviroment
+  become: true
+  hosts: Todo_redhat
+  tasks:
+    - name: Install Remi and RHEL repo
+      yum:
+        name: 
+          - https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm 
+          - dnf-utils
+          - https://rpms.remirepo.net/enterprise/remi-release-9.rpm
+        disable_gpg_check: yes
+
+    
+    - name: Install httpd on the webserver
+      yum:
+        name: httpd
+        state: present
+
+    - name: Ensure httpd is started and enabled
+      service:
+        name: httpd
+        state: started 
+        enabled: yes
+      
+    - name: Install PHP
+      yum:
+        name:
+          - php 
+          - php-mysqlnd
+          - php-gd 
+          - php-curl
+          - unzip
+          - php-common
+          - php-mbstring
+          - php-opcache
+          - php-intl
+          - php-xml
+          - php-fpm
+          - php-json
+        enablerepo: php:remi-7.4
+        state: present
+    
+    - name: Ensure php-fpm is started and enabled
+      service:
+        name: php-fpm
+        state: started 
+        enabled: yes
+
+    - name: Download the artifact
+      get_url:
+        url: http://107.23.106.53:8082/artifactory/papi/php-todo
+        dest: /home/ec2-user/
+        url_username: admin
+        url_password: cmVmdGtuOjAxOjE3MzA2NzQxMjI6T2F6MnlRVDRRV2d3UlZiY0dJbDRCN1FJTXpM
+    - name: Unzip the Artifacts
+      unarchive:
+       src: /home/ec2-user/php-todo
+       dest: /home/ec2-user/
+       remote_src: yes
+
+    - name: Deploy the Code
+      copy:
+        src: /home/ec2-user/var/lib/jenkins/workspace/php-todo_main/
+        dest: /var/www/html/
+        force: yes
+        remote_src: yes
+
+    - name: Remove default page
+      file:
+        path: /etc/httpd/conf.d/welcome.conf
+        state: absent
+
+    - name: Restart httpd
+      service:
+        name: httpd
+        state: restarted
+
+
+
+# - name: Deploying the PHP Applicaion to Dev Enviroment
+#   become: true
+#   hosts: todo
+
+  # tasks:
+
+    # - name: update repo
+    #   shell: dnf update -y
+
+    # - name: install remi and rhel repo
+    #   ansible.builtin.yum:
+    #     name: 
+    #       - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    #       - dnf-utils
+    #       - https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+    #     disable_gpg_check: yes
+    
+    # - name: install httpd on the webserver
+    #   ansible.builtin.yum:
+    #     name: httpd
+    #     state: present
+
+    # - name: ensure httpd is started and enabled
+    #   ansible.builtin.service:
+    #     name: httpd
+    #     state: started 
+    #     enabled: yes
+      
+    # - name: install PHP
+    #   ansible.builtin.yum:
+    #     name:
+    #       - php 
+    #       - php-mysqlnd
+    #       - php-gd 
+    #       - php-curl
+    #       - unzip
+    #       - php-common
+    #       - php-mbstring
+    #       - php-opcache
+    #       - php-intl
+    #       - php-xml
+    #       - php-fpm
+    #       - php-json
+    #     enablerepo: php:remi-7.4
+    #     state: present
+    
+    # - name: ensure php-fpm is started and enabled
+    #   ansible.builtin.service:
+    #     name: php-fpm
+    #     state: started 
+    #     enabled: yes
+
+    # - name: Download the artifact
+    #   get_url:
+    #     url: http://100.25.203.36:8082/artifactory/papiApp/php-todo
+    #     dest: /home/ec2-user/
+    #     url_username: admin
+    #     url_password: cmVmdGtuOjAxOjE3MjQ4NzkwNTg6dUt2ajM0a2wzMU9FY0p2ZG1kTXAxR2ROOUg5
+
+
+    # - name: unzip the artifacts
+    #   ansible.builtin.unarchive:
+    #    src: /home/ec2-user/php-todo
+    #    dest: /home/ec2-user/
+    #    remote_src: yes
+
+    # - name: deploy the code
+    #   ansible.builtin.copy:
+    #     src: /home/ec2-user/var/lib/jenkins/workspace/php-todo_main/
+    #     dest: /var/www/html/
+    #     force: yes
+    #     remote_src: yes
+
+    # - name: remove nginx default page
+    #   ansible.builtin.file:
+    #     path: /etc/httpd/conf.d/welcome.conf
+    #     state: absent
+
+    # - name: restart httpd
+    #   ansible.builtin.service:
+    #     name: httpd
+    #     state: restarted
+
+

@@ -1,0 +1,94 @@
+---
+- name: Deploying the PHP Application to Dev Enviroment
+  become: true
+  hosts: Todo
+  tasks:
+
+    - name: update cache
+      apt:
+        update_cache: yes
+    
+    - name: Install httpd on the webserver
+      apt:
+        name: apache2
+        state: present
+
+    - name: Ensure httpd is started and enabled
+      service:
+        name: apache2
+        state: started 
+        enabled: yes
+
+    - name: install python3-pip
+      apt:
+        name: python3-pip
+        state: present
+ 
+    - name: upgrade setuptools
+      shell: python3 -m pip install --upgrade setuptools
+
+    - name: upgrade pip
+      shell: python3 -m pip install --upgrade pip
+
+    - name: Install pymyql
+      shell: python3 -m pip install PyMySQL
+
+    - name: Install mysql-connector-python
+      shell: python3 -m pip install mysql-connector-python
+  
+    - name: install libpq-dev 
+      apt:
+        name: libpq-dev
+        state: present
+
+    - name: install acl
+      apt:
+        name: acl
+        state: present
+
+    - name: Install psycopg2
+      shell: python3 -m pip install psycopg2 --ignore-installed
+
+    - name: install zip and unzip
+      apt:
+        name: 
+          - zip
+          - unzip
+          - php7.4-cli
+        state: present
+
+    - name: install php dependencies
+      shell: apt install -y zip libapache2-mod-php phploc php-xml php-bcmath php-bz2 php-intl php-gd php-mbstring php-mysql php-zip php-fpm
+        
+    
+    - name: Download the artifact
+      get_url:
+        url: http://107.23.106.53:8082/artifactory/papi/php-todo
+        dest: /home/ubuntu/
+        url_username: admin
+        url_password: cmVmdGtuOjAxOjE3MzA2NzQxMjI6T2F6MnlRVDRRV2d3UlZiY0dJbDRCN1FJTXpM
+
+    - name: Unzip the Artifacts
+      unarchive:
+       src: /home/ubuntu/php-todo
+       dest: /home/ubuntu/
+       remote_src: yes
+
+    - name: Deploy the Code
+      copy:
+        src: /home/ubuntu/var/lib/jenkins/workspace/php-todo_main/
+        dest: /var/www/html/
+        force: yes
+        remote_src: yes
+
+    - name: Remove default page
+      file:
+        path: /var/www/html/index.html
+        state: absent
+        
+    - name: Restart httpd
+      service:
+        name: apache2
+        state: restarted
+
+ 

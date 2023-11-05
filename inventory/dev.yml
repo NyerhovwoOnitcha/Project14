@@ -13,3 +13,9 @@
 
 [lb]
 172.31.27.185 ansible_ssh_user='ubuntu'
+
+[Todo]
+172.31.43.87  ansible_ssh_user='ubuntu'
+
+[Todo_redhat]
+172.31.37.222 ansible_ssh_user='ec2-user'

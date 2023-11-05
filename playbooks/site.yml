@@ -16,8 +16,15 @@
 #   tags:
 #     - always
 
-- name: reference database role
-  import_playbook: ../static-assignments/database.yml
+# - name: reference database role
+#   import_playbook: ../static-assignments/database.yml
+
+# - name: reference deployment playbook ubuntu server
+#   import_playbook: ../static-assignments/Udeployment.yml
+
+- name: reference deployment playbook redhat server
+  import_playbook: ../static-assignments/deploy.yml
+
 
 # - name: reference nginx role
 #   import_playbook: ../static-assignments/nginx.yml
