@@ -22,8 +22,11 @@
 # - name: reference deployment playbook ubuntu server
 #   import_playbook: ../static-assignments/Udeployment.yml
 
-- name: reference deployment playbook redhat server
-  import_playbook: ../static-assignments/deploy.yml
+# - name: reference deployment playbook redhat server
+#   import_playbook: ../static-assignments/deploy.yml
+
+- name: reference sonarqube role
+  import_playbook: ../static-assignments/sonarqube.yml
 
 
 # - name: reference nginx role
