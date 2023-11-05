@@ -29,6 +29,8 @@ pipeline {
             steps {
                 sh 'echo ${WORKSPACE}'
                 sh 'sed -i "3 a roles_path=${WORKSPACE}/roles" ${WORKSPACE}/deploy/ansible.cfg'
+                sh 'sed -i "5 a pipelining=True" ${WORKSPACE}/deploy/ansible.cfg'
+                sh 'sed -i "6 a allow_world_readable_tmpfiles = True" ${WORKSPACE}/deploy/ansible.cfg'
             }
         }
 
